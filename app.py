@@ -16,12 +16,12 @@ days = st.number_input("Enter Days to Search (1-30):", min_value=1, max_value=30
 
 # List of broader keywords
 keywords = [
-    "Affair Relationship Stories", "Reddit Update", "Reddit Relationship Advice", "Reddit Relationship", 
-    "Reddit Cheating", "AITA Update", "Open Marriage", "Open Relationship", "X BF Caught", 
-    "Stories Cheat", "X GF Reddit", "AskReddit Surviving Infidelity", "GurlCan Reddit", 
-    "Cheating Story Actually Happened", "Cheating Story Real", "True Cheating Story", 
-    "Reddit Cheating Story", "R/Surviving Infidelity", "Surviving Infidelity", 
-    "Reddit Marriage", "Wife Cheated I Can't Forgive", "Reddit AP", "Exposed Wife", 
+    "Affair Relationship Stories", "Reddit Update", "Reddit Relationship Advice", "Reddit Relationship",
+    "Reddit Cheating", "AITA Update", "Open Marriage", "Open Relationship", "X BF Caught",
+    "Stories Cheat", "X GF Reddit", "AskReddit Surviving Infidelity", "GurlCan Reddit",
+    "Cheating Story Actually Happened", "Cheating Story Real", "True Cheating Story",
+    "Reddit Cheating Story", "R/Surviving Infidelity", "Surviving Infidelity",
+    "Reddit Marriage", "Wife Cheated I Can't Forgive", "Reddit AP", "Exposed Wife",
     "Cheat Exposed"
 ]
 
@@ -89,12 +89,11 @@ if st.button("Fetch Data"):
             for video, stat, channel in zip(videos, stats, channels):
                 title = video["snippet"].get("title", "N/A")
                 description = video["snippet"].get("description", "")[:200]
-                video_url = f"https://www.youtube.com/watch?v={video['id']['videoId']}"
+                video_url = f"http://www.youtube.com/watch?v={video['id']['videoId']}"
                 views = int(stat["statistics"].get("viewCount", 0))
                 subs = int(channel["statistics"].get("subscriberCount", 0))
 
-                # Only include videos with at least 2k views and channels with at least 500 subscribers
-                if views >= 2000 and subs >= 500:
+                if views >= 2000 and subs >= 500:  # Apply the minimum views and subscribers filter
                     all_results.append({
                         "Title": title,
                         "Description": description,
@@ -105,18 +104,18 @@ if st.button("Fetch Data"):
 
         # Display results
         if all_results:
-            st.success(f"Found {len(all_results)} results across all keywords!")
+            st.success(f"Found {len(all_results)} results across all keywords (minimum 2k views and 500 subscribers)!")
             for result in all_results:
                 st.markdown(
                     f"**Title:** {result['Title']}  \n"
                     f"**Description:** {result['Description']}  \n"
                     f"**URL:** [Watch Video]({result['URL']})  \n"
-                    f"**Views:** {result['Views']}  \n"
-                    f"**Subscribers:** {result['Subscribers']}"
+                    f"**Views:** {result['Views']:,}  \n"
+                    f"**Subscribers:** {result['Subscribers']:,}"
                 )
                 st.write("---")
         else:
-            st.warning("No results found for channels with at least 500 subscribers and videos with at least 2k views.")
+            st.warning("No results found matching the criteria (minimum 2k views and 500 subscribers).")
 
     except Exception as e:
         st.error(f"An error occurred: {e}")
