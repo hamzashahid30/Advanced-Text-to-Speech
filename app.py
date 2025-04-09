@@ -9,20 +9,20 @@ YOUTUBE_VIDEO_URL = "https://www.googleapis.com/youtube/v3/videos"
 YOUTUBE_CHANNEL_URL = "https://www.googleapis.com/youtube/v3/channels"
 
 # Streamlit App Title
-st.title("YouTube Stoicism Viral Topics Tool")
+st.title("YouTube Viral Topics Tool")
 
 # Input Fields
 days = st.number_input("Enter Days to Search (1-30):", min_value=1, max_value=30, value=5)
 
 # List of broader keywords
 keywords = [
- "Affair Relationship Stories", "Reddit Update", "Reddit Relationship Advice", "Reddit Relationship", 
-"Reddit Cheating", "AITA Update", "Open Marriage", "Open Relationship", "X BF Caught", 
-"Stories Cheat", "X GF Reddit", "AskReddit Surviving Infidelity", "GurlCan Reddit", 
-"Cheating Story Actually Happened", "Cheating Story Real", "True Cheating Story", 
-"Reddit Cheating Story", "R/Surviving Infidelity", "Surviving Infidelity", 
-"Reddit Marriage", "Wife Cheated I Can't Forgive", "Reddit AP", "Exposed Wife", 
-"Cheat Exposed"
+    "Affair Relationship Stories", "Reddit Update", "Reddit Relationship Advice", "Reddit Relationship", 
+    "Reddit Cheating", "AITA Update", "Open Marriage", "Open Relationship", "X BF Caught", 
+    "Stories Cheat", "X GF Reddit", "AskReddit Surviving Infidelity", "GurlCan Reddit", 
+    "Cheating Story Actually Happened", "Cheating Story Real", "True Cheating Story", 
+    "Reddit Cheating Story", "R/Surviving Infidelity", "Surviving Infidelity", 
+    "Reddit Marriage", "Wife Cheated I Can't Forgive", "Reddit AP", "Exposed Wife", 
+    "Cheat Exposed"
 ]
 
 # Fetch Data Button
@@ -93,7 +93,8 @@ if st.button("Fetch Data"):
                 views = int(stat["statistics"].get("viewCount", 0))
                 subs = int(channel["statistics"].get("subscriberCount", 0))
 
-                if subs < 3000:  # Only include channels with fewer than 3,000 subscribers
+                # Only include videos with at least 2k views and channels with at least 500 subscribers
+                if views >= 2000 and subs >= 500:
                     all_results.append({
                         "Title": title,
                         "Description": description,
@@ -115,7 +116,7 @@ if st.button("Fetch Data"):
                 )
                 st.write("---")
         else:
-            st.warning("No results found for channels with fewer than 3,000 subscribers.")
+            st.warning("No results found for channels with at least 500 subscribers and videos with at least 2k views.")
 
     except Exception as e:
         st.error(f"An error occurred: {e}")
